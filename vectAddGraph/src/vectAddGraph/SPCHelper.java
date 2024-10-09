@@ -1,8 +1,6 @@
 package vectAddGraph;
 
 import java.util.List;
-import java.util.Random;
-
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 
