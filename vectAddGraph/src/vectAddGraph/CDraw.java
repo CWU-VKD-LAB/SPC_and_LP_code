@@ -165,7 +165,6 @@ public class CDraw {
 	// the inputs are the gl object, and the coordinates of the x and y vectors
 	public static void drawMB2Click(GL2 gl, double[][] xcoords, double[][] ycoords) {
 		// draw first curve like normal
-		double[] midpoint = vectStuff.getMidPoint(ycoords[0], ycoords[1]);
 		double[] control = Bez.calcControlPoint(ycoords[0], ycoords[1]);
 		Bez.draw(gl, ycoords[0], control, ycoords[1]);
 		//vectStuff.drawVect(gl, midpoint[0], midpoint[1], control[0], control[1]);
@@ -174,10 +173,8 @@ public class CDraw {
 			double xdiff = 0;
 			double ydiff = 0;
 			double[] adjusted = new double[] { ycoords[i][0] + xdiff, ycoords[i][1] + ydiff };
-			midpoint = vectStuff.getMidPoint(xcoords[i - 1], adjusted);
 			control = Bez.calcControlPoint(xcoords[i - 1], adjusted);
 			Bez.draw(gl, xcoords[i - 1], control, adjusted);
-			//vectStuff.drawVect(gl, midpoint[0], midpoint[1], control[0], control[1]);
 		}
 	}
 
