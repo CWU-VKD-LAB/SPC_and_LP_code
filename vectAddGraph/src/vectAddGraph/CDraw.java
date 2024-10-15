@@ -49,6 +49,7 @@ public class CDraw {
 		double[] original = getOriginalCoefs(tableau, p.length);
 		double[] kvals = normalize(original);
 		ValHolder stuff = vectStuff.doStuff(gl, p, kvals);
+		drawConstraints(gl, tableau, kvals);
 		
 		//read from file
 		if (yCoords == null) {
@@ -89,6 +90,54 @@ public class CDraw {
 		
 		stuff.setYCoords(yCoords);
 		return stuff;
+	}
+	
+	//draws the constraints
+	public static void drawConstraints (GL2 gl, double[][] tableau, double[] kVals) {
+		for (int i = 0; i < tableau.length -1 ; i++) {
+			double[] constr = tableau[i].clone();
+			double constant = constr[constr.length-1];
+			//trim
+			double[] cTrim = trim(constr);
+			//hardcode target for now
+			int target = 1;
+			double kTarget = kVals[target];
+			double cTarget = cTrim[target];
+			double[] kNoT = removeTarget(kVals, target);
+			double[] cNoT = removeTarget(cTrim, target);
+			
+			//negate vars and divide by target
+			double[] negated = cNoT.clone();
+			for (int j = 0; j < cNoT.length; j++) {
+				//negated[j] *= -1;
+				negated[j] = negated[j] / cTarget;
+			}
+			//the commented out part has been temporarily changed to make sure that everything appears on screen
+			vectStuff.doStuff(gl, negated, kNoT, /*(constant / cTarget)*/ .5+(.5*i), 0, 0,1,0);
+		}
+	}
+	
+	//trims the contstraint
+	public static double[] trim (double[] arr) {
+		double[] foo = new double[arr.length/2];
+		for (int i = 0; i < foo.length; i++) {
+			foo[i] = arr[i];
+		}
+		return foo;
+	}
+	
+	//removes the target
+	public static double[] removeTarget (double[] r, int target) {
+		double[] foo = new double[r.length-1];
+		for (int i = 0; i < r.length; i++) {
+			if (i < target) {
+				foo[i] = r[i];
+			}
+			else if (i > target) {
+				foo[i-1] = r[i];
+			}
+		}
+		return foo;
 	}
 
 	// undos normalization of a particular value
