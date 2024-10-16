@@ -107,13 +107,15 @@ public class CDraw {
 			double[] cNoT = removeTarget(cTrim, target);
 			
 			//negate vars and divide by target
-			double[] negated = cNoT.clone();
+			double[] normed = cNoT.clone();
+			double[] kNeg = kNoT.clone();
 			for (int j = 0; j < cNoT.length; j++) {
-				//negated[j] *= -1;
-				negated[j] = negated[j] / cTarget;
+				kNeg[j] *= -1;
+				normed[j] *= -1;
+				normed[j] = normed[j] / cTarget;
 			}
 			//the commented out part has been temporarily changed to make sure that everything appears on screen
-			vectStuff.doStuff(gl, negated, kNoT, /*(constant / cTarget)*/ .5+(.5*i), 0, 0,1,0);
+			vectStuff.doStuff(gl, normed, kNeg, /*(constant / cTarget)*/ 1+(.5*i), 0, 0,1,0);
 		}
 	}
 	
