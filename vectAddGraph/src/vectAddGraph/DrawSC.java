@@ -131,7 +131,7 @@ public class DrawSC extends JPanel
 			yCoords = stuff.getYCoords();
 		}
 		else if (screen == 1) {
-			CDraw.drawConstraints(gl, tableau);
+			CDraw.drawConstraints(gl, tableau,right);
 		}
 		// draw the axes
 		gl.glColor3f(1.0f, 1.0f, 1.0f);// white

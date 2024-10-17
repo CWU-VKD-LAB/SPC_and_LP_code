@@ -94,9 +94,17 @@ public class CDraw {
 	}
 	
 	//draws the constraints
-	public static void drawConstraints (GL2 gl, double[][] tableau) {
+	public static void drawConstraints (GL2 gl, double[][] tableau, double right) {
 		double[] original = getOriginalCoefs(tableau, (tableau[0].length/2));
 		double[] kVals = normalize(original);
+		//find the max constant
+		double maxC = 0;
+		for (int i = 0; i < tableau.length-1; i++) {
+			if (tableau[i][tableau[i].length-1] > maxC) {
+				maxC = tableau[i][tableau[i].length-1];
+			}
+		}
+		//iterate through the constraints
 		for (int i = 0; i < tableau.length -1 ; i++) {
 			double[] constr = tableau[i].clone();
 			double constant = constr[constr.length-1];
@@ -117,8 +125,8 @@ public class CDraw {
 				normed[j] *= -1;
 				normed[j] = normed[j] / cTarget;
 			}
-			//the commented out part has been temporarily changed to make sure that everything appears on screen
-			vectStuff.doStuff(gl, normed, kNeg, /*(constant / cTarget)*/ 1+(.5*i), 0, 0,1,0);
+			//draw
+			vectStuff.doStuff(gl, normed, kNeg, ((constant / cTarget)/maxC)*right, 0, 0,1,0);
 		}
 	}
 	
