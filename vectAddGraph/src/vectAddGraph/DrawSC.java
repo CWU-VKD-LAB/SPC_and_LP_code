@@ -70,13 +70,20 @@ public class DrawSC extends JPanel
 			{ 0, 1, 1, 0, 0, 1, 5 },
 			{ -3, -5, -2, 0, 0, 0, 0 }
 	};
+	
+	//screen stuff
+	private double left = -0.1;
+	private double right = 3.2;
+	private double bottom = -0.1;
+	private double top = 3.2;
+	private int pixelSize = 600;
 
 	private GLUT glut = new GLUT(); // TODO: For drawing GLUT objects, otherwise, not needed.
 
 	public DrawSC() {
 		GLCapabilities caps = new GLCapabilities(null);
 		display = new GLJPanel(caps);
-		display.setPreferredSize(new Dimension(600, 600)); // TODO: set display size here
+		display.setPreferredSize(new Dimension(pixelSize, pixelSize)); // TODO: set display size here
 		display.addGLEventListener(this);
 		setLayout(new BorderLayout());
 		add(display, BorderLayout.CENTER);
@@ -110,7 +117,7 @@ public class DrawSC extends JPanel
 
 		gl.glMatrixMode(GLMatrixFunc.GL_PROJECTION); // TODO: Set up a better projection?
 		gl.glLoadIdentity();
-		gl.glOrtho(-0.1, 3.2, -0.1, 3.2, -1, 1);
+		gl.glOrtho(left, right, bottom, top, -1, 1);
 		gl.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
 
 		gl.glLoadIdentity(); // Set up modelview transform.
@@ -339,7 +346,7 @@ public class DrawSC extends JPanel
 		 * After the mouse click, the yCoords get re-calculated
 		 */
 		if (screen == 0) {
-			double[] adjustedMouse = CDraw.screenToWorld2D(x, y, 600, 600, -0.1, 3.2, -0.1, 3.2);
+			double[] adjustedMouse = CDraw.screenToWorld2D(x, y, pixelSize, pixelSize, left, right, bottom, top);
 			yCoords = CDraw.calcNewYCoordsBasedOnClick(stuff.getXCoords(), yCoords, adjustedMouse[0], adjustedMouse[1]);
 			// printing for debugging purposes
 			// System.out.println(adjustedMouse[0]+"\n"+x+"\n"+y);
