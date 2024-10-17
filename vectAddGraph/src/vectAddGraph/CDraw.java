@@ -15,7 +15,7 @@ public class CDraw {
 	// simplex method performs on
 	// yCoords is for the Y vector (the yellow one)
 	// returns a ValHolder, to return multiple values
-	public static ValHolder render(GL2 gl, double[][] yCoords) {
+	public static ValHolder render(GL2 gl, double[][] tableau, double[][] yCoords) {
 		// get tableau, hardcode for now
 		/*
 		 * double[][] tableau = {
@@ -33,13 +33,15 @@ public class CDraw {
 		 * 	{-7,-12,-5,0,0,0,0}
 		 * };
 		 */
-
+		
+		/*
 		double[][] tableau = {
 				{ 1, 1, 0, 1, 0, 0, 4 },
 				{ 1, 3, 0, 0, 1, 0, 6 },
 				{ 0, 1, 1, 0, 0, 1, 5 },
 				{ -3, -5, -2, 0, 0, 0, 0 }
 		};
+		*/
 
 		// do simplex
 		double[] result = Simplex.executeSimplex(tableau.clone());
@@ -49,7 +51,6 @@ public class CDraw {
 		double[] original = getOriginalCoefs(tableau, p.length);
 		double[] kvals = normalize(original);
 		ValHolder stuff = vectStuff.doStuff(gl, p, kvals);
-		drawConstraints(gl, tableau, kvals);
 		
 		//read from file
 		if (yCoords == null) {
@@ -93,7 +94,9 @@ public class CDraw {
 	}
 	
 	//draws the constraints
-	public static void drawConstraints (GL2 gl, double[][] tableau, double[] kVals) {
+	public static void drawConstraints (GL2 gl, double[][] tableau) {
+		double[] original = getOriginalCoefs(tableau, (tableau[0].length/2));
+		double[] kVals = normalize(original);
 		for (int i = 0; i < tableau.length -1 ; i++) {
 			double[] constr = tableau[i].clone();
 			double constant = constr[constr.length-1];

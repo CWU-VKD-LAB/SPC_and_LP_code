@@ -63,6 +63,13 @@ public class DrawSC extends JPanel
 
 	private double[][] yCoords = null;
 	private ValHolder stuff;
+	private int screen = 0;
+	private double[][] tableau = {
+			{ 1, 1, 0, 1, 0, 0, 4 },
+			{ 1, 3, 0, 0, 1, 0, 6 },
+			{ 0, 1, 1, 0, 0, 1, 5 },
+			{ -3, -5, -2, 0, 0, 0, 0 }
+	};
 
 	private GLUT glut = new GLUT(); // TODO: For drawing GLUT objects, otherwise, not needed.
 
@@ -84,7 +91,7 @@ public class DrawSC extends JPanel
 		display.addMouseMotionListener(this);
 
 		// TODO: Uncomment the following line to start the animation
-		// startAnimation();
+		//startAnimation();
 
 	}
 
@@ -111,10 +118,14 @@ public class DrawSC extends JPanel
 		// TODO: add drawing code here!!
 
 		// draw the vectors
-
-		stuff = CDraw.render(gl, yCoords);
-		yCoords = stuff.getYCoords();
-
+		//System.out.println(screen);
+		if (screen == 0) {
+			stuff = CDraw.render(gl, tableau, yCoords);
+			yCoords = stuff.getYCoords();
+		}
+		else if (screen == 1) {
+			CDraw.drawConstraints(gl, tableau);
+		}
 		// draw the axes
 		gl.glColor3f(1.0f, 1.0f, 1.0f);// white
 
@@ -180,11 +191,22 @@ public class DrawSC extends JPanel
 
 		JMenu menu = new JMenu("Save"); // Create a menu and add it to the menu bar
 		menubar.add(menu);
+		
+		JMenu menu2 = new JMenu("Screen"); // Create a menu and add it to the menu bar
+		menubar.add(menu2);
 
 		JMenuItem item = new JMenuItem("Save Y Vector to File"); // Create a menu command.
 		item.addActionListener(menuHandler); // Set up handling for this command.
 		menu.add(item); // Add the command to the menu.
-
+		
+		JMenuItem item2 = new JMenuItem("Objective Function"); // Create a menu command.
+		item2.addActionListener(menuHandler); // Set up handling for this command.
+		menu2.add(item2); // Add the command to the menu.
+		
+		JMenuItem item3 = new JMenuItem("Constraints"); // Create a menu command.
+		item3.addActionListener(menuHandler); // Set up handling for this command.
+		menu2.add(item3); // Add the command to the menu.
+		
 		// TODO: Add additional menu commands and menus.
 
 		return menubar;
@@ -209,7 +231,14 @@ public class DrawSC extends JPanel
 					e.printStackTrace();
 				}
 			}
+			else if (command.equals("Objective Function")) {
+				screen = 0;
+			}
+			else if (command.equals("Constraints")) {
+				screen = 1;
+			}
 			// TODO: Implement any additional menu commands.
+			display.repaint();
 		}
 	}
 
@@ -309,11 +338,12 @@ public class DrawSC extends JPanel
 		/*
 		 * After the mouse click, the yCoords get re-calculated
 		 */
-		double[] adjustedMouse = CDraw.screenToWorld2D(x, y, 600, 600, -0.1, 3.2, -0.1, 3.2);
-		yCoords = CDraw.calcNewYCoordsBasedOnClick(stuff.getXCoords(), yCoords, adjustedMouse[0], adjustedMouse[1]);
-		// printing for debugging purposes
-		// System.out.println(adjustedMouse[0]+"\n"+x+"\n"+y);
-
+		if (screen == 0) {
+			double[] adjustedMouse = CDraw.screenToWorld2D(x, y, 600, 600, -0.1, 3.2, -0.1, 3.2);
+			yCoords = CDraw.calcNewYCoordsBasedOnClick(stuff.getXCoords(), yCoords, adjustedMouse[0], adjustedMouse[1]);
+			// printing for debugging purposes
+			// System.out.println(adjustedMouse[0]+"\n"+x+"\n"+y);
+		}
 		dragging = true; // might not always be correct!
 		prevX = startX = x;
 		prevY = startY = y;
