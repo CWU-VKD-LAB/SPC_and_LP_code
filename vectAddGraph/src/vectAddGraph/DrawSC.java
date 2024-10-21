@@ -123,16 +123,13 @@ public class DrawSC extends JPanel
 		gl.glLoadIdentity(); // Set up modelview transform.
 
 		// TODO: add drawing code here!!
-
-		// draw the vectors
-		//System.out.println(screen);
-		if (screen == 0) {
-			stuff = CDraw.render(gl, tableau, yCoords);
-			yCoords = stuff.getYCoords();
+		
+		if (screen == 1) {
+			//zoom out to see everything
+			gl.glScaled(.5, .5, 1);
+			gl.glTranslated(3, 0, 0);
 		}
-		else if (screen == 1) {
-			CDraw.drawConstraints(gl, tableau,right);
-		}
+		
 		// draw the axes
 		gl.glColor3f(1.0f, 1.0f, 1.0f);// white
 
@@ -145,6 +142,17 @@ public class DrawSC extends JPanel
 		gl.glVertex2d(0, -99); // vector start
 		gl.glVertex2d(0, 99); // vector end
 		gl.glEnd();
+		
+		// draw the vectors
+		//System.out.println(screen);
+		if (screen == 0) {
+			stuff = CDraw.render(gl, tableau, yCoords);
+			yCoords = stuff.getYCoords();
+		}
+		else if (screen == 1) {
+			CDraw.drawC2(gl, tableau);
+		}
+		
 
 	}
 

@@ -76,6 +76,7 @@ public class CDraw {
 		double xPrintLoc = stuff.getXCoords()[stuff.getXCoords().length - 1][0];
 		TextRenderer.draw(gl, String.format("%.2f", total), xPrintLoc, 0);
 		
+		//y vector stuff
 		double yTotal = 0;
 		gl.glColor3f(1,1,0);
 		for (int i = 1; i < yCoords.length; i++) {
@@ -94,6 +95,7 @@ public class CDraw {
 	}
 	
 	//draws the constraints
+	//this version is incorrect, see drawC2
 	public static void drawConstraints (GL2 gl, double[][] tableau, double right) {
 		double[] original = getOriginalCoefs(tableau, (tableau[0].length/2));
 		double[] kVals = normalize(original);
@@ -127,6 +129,34 @@ public class CDraw {
 			}
 			//draw
 			vectStuff.doStuff(gl, normed, kNeg, ((constant / cTarget)/maxC)*right, 0, 0,1,0);
+		}
+	}
+	
+	//draws the constraints
+	//the inputs are the gl object and the tableau
+	public static void drawC2(GL2 gl, double[][] tableau) {
+		//hardcode the target for now
+		int target = 1;
+		
+		// do simplex
+		double[] result = Simplex.executeSimplex(tableau.clone());
+		// trim the results
+		double[] p = getPoint(result);
+		//get xVals
+		double[] xVals = removeTarget(p,target);
+		double xTarget = p[target];
+		
+		//iterate through the constraints
+		for (int i = 0; i < tableau.length - 1 ; i++) {
+			double[] trimmed = trim(tableau[i]);
+			double[] kVals = normalize(trimmed);
+			double[] kTrim = removeTarget(kVals, target);
+			//calculate the length
+			double[] angles = vectStuff.getAngles(kTrim);
+			double[][] coords = vectStuff.getCoords(kTrim, angles, xVals, 0,0);
+			double length = coords[coords.length-1][0];
+			
+			vectStuff.doStuff(gl, xVals, kTrim, (xTarget-length),0, 0,1,0);
 		}
 	}
 	
