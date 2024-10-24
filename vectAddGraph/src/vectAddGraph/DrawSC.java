@@ -65,17 +65,18 @@ public class DrawSC extends JPanel
 	private ValHolder stuff;
 	private int screen = 0;
 	private double[][] tableau = {
-			{ 1, 1, 0, 1, 0, 0, 4 },
-			{ 1, 3, 0, 0, 1, 0, 6 },
-			{ 0, 1, 1, 0, 0, 1, 5 },
-			{ -3, -5, -2, 0, 0, 0, 0 }
+			{ 3, 2, 5, 1, 0, 0, 0, 27.5 },
+			{ 2, 1, 1, 0, 1, 0, 0, 13 },
+			{ 1, 1, 3, 0, 0, 1, 0, 15 },
+			{ 5, 2, 4, 0, 0, 0, 1, 28.5 },
+			{ -10, -5, -7.5, 0, 0, 0, 0, 0 }
 	};
 	
 	//screen stuff
 	private double left = -0.1;
-	private double right = 3.2;
+	private double right = 5;
 	private double bottom = -0.1;
-	private double top = 3.2;
+	private double top = 5;
 	private int pixelSize = 600;
 
 	private GLUT glut = new GLUT(); // TODO: For drawing GLUT objects, otherwise, not needed.
@@ -126,8 +127,9 @@ public class DrawSC extends JPanel
 		
 		if (screen == 1) {
 			//zoom out to see everything
-			gl.glScaled(.5, .5, 1);
-			gl.glTranslated(3, 0, 0);
+			//gl.glScaled(.5, .5, 1);
+			gl.glTranslated(-20, 0, 0);
+			gl.glScaled(2,2,1);
 		}
 		
 		// draw the axes
