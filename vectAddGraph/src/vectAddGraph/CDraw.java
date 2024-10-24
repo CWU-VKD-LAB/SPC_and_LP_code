@@ -42,11 +42,12 @@ public class CDraw {
 				{ -3, -5, -2, 0, 0, 0, 0 }
 		};
 		*/
-
+		
+		int pLength = getPLength(tableau);
 		// do simplex
 		double[] result = Simplex.executeSimplex(tableau.clone());
 		// trim the results
-		double[] p = getPoint(result);
+		double[] p = trim(result,pLength);
 
 		double[] original = getOriginalCoefs(tableau, p.length);
 		double[] kvals = normalize(original);
@@ -97,6 +98,7 @@ public class CDraw {
 	//draws the constraints
 	//this version is incorrect, see drawC2
 	public static void drawConstraints (GL2 gl, double[][] tableau, double right) {
+		int pLength = getPLength(tableau);
 		double[] original = getOriginalCoefs(tableau, (tableau[0].length/2));
 		double[] kVals = normalize(original);
 		//find the max constant
@@ -111,7 +113,7 @@ public class CDraw {
 			double[] constr = tableau[i].clone();
 			double constant = constr[constr.length-1];
 			//trim
-			double[] cTrim = trim(constr);
+			double[] cTrim = trim(constr,pLength);
 			//hardcode target for now
 			int target = 1;
 			double kTarget = kVals[target];
@@ -138,31 +140,40 @@ public class CDraw {
 		//hardcode the target for now
 		int target = 1;
 		
+		int pLength = getPLength(tableau);
 		// do simplex
 		double[] result = Simplex.executeSimplex(tableau.clone());
 		// trim the results
-		double[] p = getPoint(result);
+		double[] p = trim(result,pLength);
 		//get xVals
 		double[] xVals = removeTarget(p,target);
 		double xTarget = p[target];
 		
 		//iterate through the constraints
 		for (int i = 0; i < tableau.length - 1 ; i++) {
-			double[] trimmed = trim(tableau[i]);
+			double[] trimmed = trim(tableau[i], pLength);
 			double[] kVals = normalize(trimmed);
 			double[] kTrim = removeTarget(kVals, target);
+			double[] negated = kTrim.clone();
+			double[] xMod = xVals.clone();
+			for (int j = 0; j < negated.length; j++) {
+				System.out.println(negated.length);
+				System.out.println(xMod.length);
+				negated[j] *= -1;
+				xMod[j] *= -1;
+			}
 			//calculate the length
-			double[] angles = vectStuff.getAngles(kTrim);
-			double[][] coords = vectStuff.getCoords(kTrim, angles, xVals, 0,0);
+			double[] angles = vectStuff.getAngles(negated);
+			double[][] coords = vectStuff.getCoords(negated, angles, xMod, 0,0);
 			double length = coords[coords.length-1][0];
 			
-			vectStuff.doStuff(gl, xVals, kTrim, (xTarget-length),0, 0,1,0);
+			vectStuff.doStuff(gl, xMod, negated, (xTarget-length),0, 0,1,0);
 		}
 	}
 	
 	//trims the contstraint
-	public static double[] trim (double[] arr) {
-		double[] foo = new double[arr.length/2];
+	public static double[] trim (double[] arr, int pLength) {
+		double[] foo = new double[pLength];
 		for (int i = 0; i < foo.length; i++) {
 			foo[i] = arr[i];
 		}
@@ -239,6 +250,19 @@ public class CDraw {
 		}
 
 		return p;
+	}
+	
+	public static int getPLength(double[][] tableau) {
+		int l = 0;
+		for (int i = 0; i < tableau[tableau.length - 1].length; i++) {
+			if (tableau[tableau.length - 1][i] == 0) {
+				return l;
+			}
+			else {
+				l++;
+			}
+		}
+		return l;
 	}
 
 	// similar to how the x vector is drawn, but with bezier curves instead of lines
