@@ -270,9 +270,10 @@ public class DrawSPC extends JPanel implements
         SPCHelper.drawManyRects(gl, xr, yr, wr, hr);
         
         SPCHelper.realSCP(gl,anchor);
+        SPCHelper.drawBothInRects(gl, anchor, data, xr, yr, wr, hr, highlight);
         
-        SPCHelper.drawNthPairs(gl, anchor, sb, 0, 1, 0, 2);
-        SPCHelper.drawNthPairs(gl, anchor, sm, .7f, 0, .1f, 2);
+        //SPCHelper.drawNthPairs(gl, anchor, sb, 0, 1, 0, 2);
+        //SPCHelper.drawNthPairs(gl, anchor, sm, .7f, 0, .1f, 2);
         
         //SPCHelper.drawR2H(gl, anchor, sm, xgrid, ygrid, wgrid, hgrid, hpair, hrect, .7f, 0, .1f);
         //System.out.println(SPCHelper.drawAllR2(gl, anchor, sm, xgrid, ygrid, wgrid, hgrid, .7f, 0, .1f));
@@ -283,10 +284,11 @@ public class DrawSPC extends JPanel implements
         //System.out.println(SPCHelper.drawNoneInR2(gl, anchor, sm, xgrid, ygrid, wgrid, hgrid, .7f, 0, .1f));
         //SPCHelper.drawR2Full(gl, anchor, sm, xgrid, ygrid, wgrid, hgrid, .7f, 0, .1f, h2);
         //SPCHelper.drawRound2(gl, anchor, sb, xr, yr, wr, hr, 0, 1, 0);
-        //SPCHelper.drawRound2(gl, anchor, sm, xr, yr, wr, hr, .7f, 0, .1f);
+        //SPCHelper.drawRound2(gl, anchor, sm, xr, yr, wr, hr, .7f, 0, .1f, 2);
         
-        //SPCHelper.drawRound2(gl, anchor, ReadCancer.getOutsideB(), xr, yr, wr, hr, 0,1,0);
-        //SPCHelper.r2Outside(gl, anchor, ReadCancer.getOutsideB(), xr, yr, wr, hr, 0,1,0);
+        //SPCHelper.drawND(gl, anchor, ReadCancer.get1st(sb), 0, 1, 0);
+        //SPCHelper.drawInHC(gl, anchor, data, 0, 0, 5);
+        //SPCHelper.drawHyperCube(gl, 5, 0, 0);
     }
 
     /**
