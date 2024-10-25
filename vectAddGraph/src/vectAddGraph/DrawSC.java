@@ -127,9 +127,9 @@ public class DrawSC extends JPanel
 		
 		if (screen == 1) {
 			//zoom out to see everything
-			//gl.glScaled(.5, .5, 1);
-			gl.glTranslated(-20, 0, 0);
+			//gl.glScaled(.75, .75, 1);
 			gl.glScaled(2,2,1);
+			gl.glTranslated(-10, 0, 0);
 		}
 		
 		// draw the axes

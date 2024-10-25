@@ -152,7 +152,12 @@ public class CDraw {
 		//iterate through the constraints
 		for (int i = 0; i < tableau.length - 1 ; i++) {
 			double[] trimmed = trim(tableau[i], pLength);
-			double[] kVals = normalize(trimmed);
+			double kTarget = trimmed[target];
+			double[] kDiv = trimmed.clone();
+			for (int j = 0; j < kDiv.length; j++) {
+				kDiv[j] = kDiv[j] / kTarget;
+			}
+			double[] kVals = normalize(kDiv);
 			double[] kTrim = removeTarget(kVals, target);
 			double[] negated = kTrim.clone();
 			double[] xMod = xVals.clone();
@@ -160,6 +165,7 @@ public class CDraw {
 				System.out.println(negated.length);
 				System.out.println(xMod.length);
 				negated[j] *= -1;
+				//negated[j] = negated[j] / kTarget;
 				xMod[j] *= -1;
 			}
 			//calculate the length
